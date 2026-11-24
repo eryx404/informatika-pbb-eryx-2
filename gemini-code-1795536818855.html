@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ИНФОРМАТИКА ПББ 2026 — 2-БӨЛІМ (167–341 СҰРАҚ)</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #151e32;
+      --card-border: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --purple: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
+    .container { max-width: 900px; margin: 0 auto; padding: 15px; }
+
+    header {
+      background: var(--card); border-bottom: 1px solid var(--card-border);
+      padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .logo-area { display: flex; align-items: center; gap: 10px; }
+    .logo-badge { background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; font-weight: 900; padding: 6px 12px; border-radius: 8px; font-size: 1.1rem; }
+    .logo-title { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .logo-sub { font-size: 0.75rem; color: var(--primary); font-weight: 600; }
+    .header-controls { display: flex; align-items: center; gap: 10px; }
+
+    .btn {
+      padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem;
+      border: 1px solid transparent; cursor: pointer; transition: 0.2s; display: inline-flex;
+      align-items: center; gap: 6px; text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: #000; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline { background: transparent; border-color: var(--card-border); color: var(--text-muted); }
+    .btn-outline:hover { background: var(--card-border); color: #fff; }
+    .btn-warning { background: var(--warning); color: #000; }
+    .btn-danger { background: var(--danger); color: #fff; }
+
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0;
+    }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--card-border); padding: 14px;
+      border-radius: 12px; text-align: center;
+    }
+    .stat-val { font-size: 1.5rem; font-weight: 900; color: #fff; }
+    .stat-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-weight: 600; }
+
+    .mode-toggle {
+      display: flex; gap: 10px; background: var(--card); padding: 6px; border-radius: 12px;
+      border: 1px solid var(--card-border); margin-bottom: 20px;
+    }
+    .mode-btn {
+      flex: 1; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 0.9rem;
+      border: none; background: transparent; color: var(--text-muted); cursor: pointer; transition: 0.2s;
+    }
+    .mode-btn.active { background: #1e293b; color: #fff; border: 1px solid var(--primary); }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
+    .tab-btn {
+      padding: 10px 18px; border-radius: 10px; background: var(--card); border: 1px solid var(--card-border);
+      color: var(--text-muted); font-weight: 700; font-size: 0.85rem; cursor: pointer; white-space: nowrap;
+    }
+    .tab-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+
+    .grid-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 25px; }
+    .menu-card {
+      background: var(--card); border: 1px solid var(--card-border); border-radius: 14px;
+      padding: 18px; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden;
+    }
+    .menu-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+    .menu-badge { font-size: 0.7rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; background: #1e293b; color: var(--primary); display: inline-block; margin-bottom: 10px; }
+    .menu-title { font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .menu-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 14px; }
+    .menu-btn { width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; color: #fff; font-weight: 700; font-size: 0.85rem; border: none; }
+
+    /* QUIZ INTERFACE */
+    .quiz-view { display: none; }
+    .quiz-top {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+      background: var(--card); padding: 12px 18px; border-radius: 12px; border: 1px solid var(--card-border);
+    }
+    .quiz-info { font-weight: 800; font-size: 0.95rem; }
+    .streak-badge { background: #f59e0b; color: #000; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 0.8rem; }
+    .timer-wrap { font-size: 1.1rem; font-weight: 900; color: var(--primary); font-family: monospace; }
+
+    .q-card {
+      background: var(--card); border: 1px solid var(--card-border); border-radius: 16px;
+      padding: 24px; margin-bottom: 20px;
+    }
+    .q-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; background: #0284c7; color: #fff; font-size: 0.75rem; font-weight: 800; margin-bottom: 12px; }
+    .q-title { font-size: 1.15rem; font-weight: 700; line-height: 1.5; color: #fff; margin-bottom: 15px; }
+
+    /* TABLES & VISUAL BOXES */
+    .grid-table, .excel-table {
+      width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; background: #0f172a; border-radius: 8px; overflow: hidden;
+    }
+    .grid-table th, .grid-table td, .excel-table th, .excel-table td {
+      border: 1px solid #334155; padding: 8px 12px; text-align: left;
+    }
+    .grid-table th, .excel-table th { background: #1e293b; color: var(--primary); font-weight: 700; }
+    .excel-table td.row-num { background: #1e293b; font-weight: bold; text-align: center; width: 35px; color: #94a3b8; }
+    .code-box {
+      background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 12px;
+      color: #38bdf8; font-family: "Fira Code", monospace; font-size: 0.85rem; line-height: 1.45;
+      overflow-x: auto; margin: 12px 0;
+    }
+    .preview-box {
+      background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 14px; margin: 12px 0;
+    }
+
+    .options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .opt-btn {
+      background: #1e293b; border: 2px solid #334155; border-radius: 12px; padding: 14px 18px;
+      text-align: left; font-size: 0.95rem; font-weight: 600; color: #f8fafc; cursor: pointer;
+      display: flex; align-items: center; gap: 14px; transition: 0.15s;
+    }
+    .opt-btn:hover { border-color: var(--primary); background: #24324d; }
+    .opt-key {
+      background: #0f172a; color: var(--primary); width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .opt-btn.correct { background: #064e3b; border-color: var(--success); color: #fff; }
+    .opt-btn.correct .opt-key { background: var(--success); color: #000; }
+    .opt-btn.wrong { background: #7f1d1d; border-color: var(--danger); color: #fff; }
+    .opt-btn.wrong .opt-key { background: var(--danger); color: #fff; }
+
+    .bottom-bar {
+      display: flex; justify-content: space-between; align-items: center; margin-top: 20px;
+    }
+    .search-input {
+      width: 100%; padding: 12px 16px; border-radius: 10px; background: var(--card); border: 1px solid var(--card-border);
+      color: #fff; font-size: 0.95rem; margin-bottom: 20px;
+    }
+
+    /* EXAM & RESULTS */
+    .result-view {
+      display: none; background: var(--card); border: 1px solid var(--card-border); border-radius: 16px;
+      padding: 30px; text-align: center;
+    }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 15px 0; }
+    .nav-grid { display: flex; flex-wrap: wrap; gap: 6px; margin: 15px 0; max-height: 150px; overflow-y: auto; padding: 4px; }
+    .nav-dot { width: 32px; height: 32px; border-radius: 6px; background: #1e293b; color: #94a3b8; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid transparent; }
+    .nav-dot.current { border-color: var(--primary); color: #fff; }
+    .nav-dot.ans-correct { background: #064e3b; color: #fff; }
+    .nav-dot.ans-wrong { background: #7f1d1d; color: #fff; }
+
+    @media (max-width: 600px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      header { flex-direction: column; gap: 10px; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <div class="logo-badge">PBB 2.0</div>
+    <div>
+      <div class="logo-title">ИНФОРМАТИКА ПББ 2026</div>
+      <div class="logo-sub">2-БӨЛІМ · 167–341 СҰРАҚТАР (175 СҰРАҚ)</div>
+    </div>
+  </div>
+  <div class="header-controls">
+    <button class="btn btn-outline" onclick="toggleSound()" id="soundBtn">🔊 Дыбыс: Қосулы</button>
+    <button class="btn btn-primary" onclick="showDashboard()">Басты бет</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboardView">
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-val">175</div>
+        <div class="stat-lbl">БАЗА КӨЛЕМІ (167–341)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="userScore">0/40</div>
+        <div class="stat-lbl">ҮЗДІК ЕМТИХАН</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="totalDone">0</div>
+        <div class="stat-lbl">ТАЛДАНҒАН СҰРАҚТАР</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color:var(--danger)" id="errorCount">0</div>
+        <div class="stat-lbl">ҚАТЕЛЕР БАНКІ</div>
+      </div>
+    </div>
+
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="gameModeBtn" onclick="setMode('game')">🎮 Ойын режимі (40с таймер + Streak)</button>
+      <button class="mode-btn" id="studyModeBtn" onclick="setMode('study')">📚 Жаттау режимі (Таймерсіз + Навигатор)</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('blocks')">📦 4 Блок бойынша (175 сұрақ)</button>
+      <button class="tab-btn" onclick="switchTab('topics')">🏷️ 8 Тақырыптық бөлім</button>
+      <button class="tab-btn" onclick="switchTab('exam')">🎓 40 Сұрақ Емтихан (60 мин)</button>
+      <button class="tab-btn" onclick="switchTab('bank')">🔍 175 База & Іздеу</button>
+    </div>
+
+    <!-- TAB 1: BLOCKS -->
+    <div id="tabBlocks" class="tab-content">
+      <div class="grid-menu">
+        <div class="menu-card" onclick="startBlock(167, 210, '1-Блок: 167–210 сұрақтар')">
+          <span class="menu-badge">167–210</span>
+          <div class="menu-title">1-Блок (44 сұрақ)</div>
+          <div class="menu-desc">Python тізімдері, HTML тегтері, 4G жылдамдығы, тасымалдау уақыты, криптография.</div>
+          <button class="menu-btn">Бастау →</button>
+        </div>
+        <div class="menu-card" onclick="startBlock(211, 250, '2-Блок: 211–250 сұрақтар')">
+          <span class="menu-badge">211–250</span>
+          <div class="menu-title">2-Блок (40 сұрақ)</div>
+          <div class="menu-desc">Нейрон синапстары, Excel формула көшіру, CSS орналасу блоктары, логикалық өрнектер.</div>
+          <button class="menu-btn">Бастау →</button>
+        </div>
+        <div class="menu-card" onclick="startBlock(251, 295, '3-Блок: 251–295 сұрақтар')">
+          <span class="menu-badge">251–295</span>
+          <div class="menu-title">3-Блок (45 сұрақ)</div>
+          <div class="menu-desc">SQL LIKE іздеу, видеомонтаж, ақпараттық қауіпсіздік, 8-биттік код, тактілік жиілік.</div>
+          <button class="menu-btn">Бастау →</button>
+        </div>
+        <div class="menu-card" onclick="startBlock(296, 341, '4-Блок: 296–341 сұрақтар')">
+          <span class="menu-badge">296–341</span>
+          <div class="menu-title">4-Блок (46 сұрақ)</div>
+          <div class="menu-desc">Хартли формуласы, Excel қателіктері, IP мекенжай фрагменттері, статикалық тұтастық.</div>
+          <button class="menu-btn">Бастау →</button>
+        </div>
+        <div class="menu-card" style="border-color:#f59e0b;" onclick="startVisuals()">
+          <span class="menu-badge" style="background:#f59e0b;color:#000;">ВИЗУАЛ & КЕСТЕ</span>
+          <div class="menu-title">Суретті-Кестелі сұрақтар (12 сұрақ)</div>
+          <div class="menu-desc">Нейрондық желі, HTML блоктары, Excel формулалары, SQL кестелері мен IP фрагменттері.</div>
+          <button class="menu-btn" style="background:#f59e0b;color:#000;">Бастау →</button>
+        </div>
+        <div class="menu-card" style="border-color:#10b981;" onclick="startMarathon()">
+          <span class="menu-badge" style="background:#10b981;color:#000;">ТОЛЫҚ МАРАФОН</span>
+          <div class="menu-title">Барлық 175 сұрақ (167–341)</div>
+          <div class="menu-desc">2-файлдың барлық сұрақтарын үзіліссіз бірден өтіп, біліміңізді толық тексеріңіз.</div>
+          <button class="menu-btn" style="background:#10b981;color:#000;">Марафонды бастау →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: TOPICS -->
+    <div id="tabTopics" class="tab-content" style="display:none;">
+      <div class="grid-menu" id="topicsMenu"></div>
+    </div>
+
+    <!-- TAB 3: EXAM INTRO -->
+    <div id="tabExam" class="tab-content" style="display:none;">
+      <div class="menu-card" style="padding:30px;text-align:center;max-width:550px;margin:20px auto;">
+        <div style="font-size:2.5rem;margin-bottom:10px;">🎓</div>
+        <div class="menu-title" style="font-size:1.3rem;">Емтихан Симуляторы (40 Сұрақ)</div>
+        <div class="menu-desc">175 сұрақтың ішінен кездейсоқ 40 сұрақ таңдалады. Уақыт шектеуі: 60 минут. Өту межесі: 32/40 (80%).</div>
+        <button class="btn btn-primary" style="padding:12px 28px;font-size:1rem;" onclick="startExam()">Емтиханды бастау</button>
+      </div>
+    </div>
+
+    <!-- TAB 4: DATABASE & SEARCH -->
+    <div id="tabBank" class="tab-content" style="display:none;">
+      <input type="text" class="search-input" id="searchInput" placeholder="Кез келген сөзді, сұрақ нөмірін немесе терминді іздеңіз..." oninput="filterBank()">
+      <div id="bankList"></div>
+    </div>
+
+  </div>
+
+  <!-- QUIZ INTERFACE VIEW -->
+  <div id="quizView" class="quiz-view">
+    <div class="quiz-top">
+      <div class="quiz-info" id="quizProgress">Сұрақ 1 / 40</div>
+      <div class="streak-badge" id="streakBox" style="display:none;">🔥 Streak: 0</div>
+      <div class="timer-wrap" id="timerBox">⏱️ 40с</div>
+      <button class="btn btn-outline" style="padding:4px 10px;" onclick="quitQuiz()">✕ Шығу</button>
+    </div>
+
+    <div class="q-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span class="q-badge" id="qBadge">№167 · Python</span>
+        <button class="btn btn-outline" style="padding:2px 8px;font-size:0.75rem;" id="flagBtn" onclick="toggleFlag()">🚩 Белгілеу</button>
+      </div>
+      <div class="q-title" id="qText">Сұрақ мәтіні осында шығады</div>
+      <div id="qVisual"></div>
+      <div class="options-grid" id="optionsGrid"></div>
+    </div>
+
+    <div id="studyNav" style="display:none;">
+      <div style="font-size:0.8rem;color:var(--text-muted);font-weight:700;margin-bottom:6px;">Сұрақтар картасы:</div>
+      <div class="nav-grid" id="navGrid"></div>
+    </div>
+
+    <div class="bottom-bar">
+      <button class="btn btn-outline" id="prevBtn" onclick="prevQuestion()" style="display:none;">← Алдыңғы</button>
+      <div id="scoreLive" style="font-weight:700;color:var(--text-muted);font-size:0.85rem;"></div>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none;">Келесі →</button>
+    </div>
+  </div>
+
+  <!-- RESULT VIEW -->
+  <div id="resultView" class="result-view">
+    <div style="font-size:3rem;" id="resultEmoji">🎉</div>
+    <div class="menu-title" style="font-size:1.6rem;margin-top:10px;" id="resultTitle">Тест аяқталды!</div>
+    <div class="result-score" id="resultScore">38 / 40</div>
+    <div style="color:var(--text-muted);margin-bottom:20px;font-size:0.95rem;" id="resultDesc">Өте жақсы нәтиже!</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="showDashboard()">Мәзірге оралу</button>
+      <button class="btn btn-warning" id="retryErrorsBtn" style="display:none;" onclick="startErrors()">Қателермен жұмыс</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- EMBEDDED COMPLETE DATA (167–341) -->
+<script>
+// RAW 175 QUESTIONS (167-341) EXTRACTED DIRECTLY FROM 2.pdf
+const DB = [
+  {"id":167,"topic":"python","q":"Программаның нәтижесін анықта:","code":"numbers = [2, -5, 13, 4, -65, 56]\nsum = 0\ncount = 0\nfor number in numbers:\n    if number % 2 == 1:\n        sum += number\n    if number > 0:\n        count += 1\nprint('sum=', sum)\nprint('count=', count)","opts":["sum = 62 count = 4","sum = 62 count = 2","sum = -57 count = 2","sum = -57 count = 4"],"ans":3},
+  {"id":168,"topic":"hardware","q":"1946 жылы әлемде алғаш рет құрастырылған программаланатын компьютер","opts":["ПАСКАЛЬ ДӨҢГЕЛЕГІ","ABC","ENIAC","АНАЛИТИКАЛЫҚ МӘШИНЕ"],"ans":2},
+  {"id":169,"topic":"ai","q":"Векторлық графика редакторы","opts":["GimpPortable","Corel Draw","Paint","Adobe Photoshop"],"ans":1},
+  {"id":170,"topic":"logic","q":"Табиғи және формальды тілдер көмегімен жазбаша түрінде ұсынылатын ақпарат","opts":["видео ақпарат","дыбыстық ақпарат","графикалық ақпарат","мәтіндік ақпарат"],"ans":3},
+  {"id":171,"topic":"security","q":"Биометриялық аутентификациядағы динамикалық әдіс","opts":["алақанның пішіні бойынша","қолжазбасы бойынша","көз торы бойынша","саусақ іздері бойынша"],"ans":1},
+  {"id":172,"topic":"security","q":"Сервистен мәліметтерді, логиндер мен құпия сөздерді алу мақсатында Wi-Fi желісіне қолданылатын шабуыл түрі","opts":["sidejacking","honeypot","sniffing","evil twin"],"ans":3},
+  {"id":173,"topic":"python","q":"Келесі амалдардың ішіндегі жоғары басымдылыққа ие амал: //, >, =, /","opts":["/","<",">","="],"ans":0},
+  {"id":174,"topic":"network","q":"Берілген желінің IP-адресі және маскасы бойынша желідегі компьютерлер санын анықтаңыз: IP-адрес 192.168.104.109, маска 255.255.255.128","opts":["255","109","68","126"],"ans":3},
+  {"id":175,"topic":"security","q":"Виженер шифрлау әдісін пайдаланып, «astana» сөзін шифрлаңыз, мұндағы кілт «app»","opts":["bijbdq","tkrtmt","tfetjb","anatsa"],"ans":0},
+  {"id":176,"topic":"hardware","q":"ЭЕМ-нің даму тарихының алғашқы буынында компьютерлердің негізгі элементтік базасы","opts":["оптоэлектроника","интегралдық микросхемалар","жартылай өткізгіштер","электрондық шамдар"],"ans":3},
+  {"id":177,"topic":"logic","q":"Excel-де А1 ұяшығын төмен қарай толтыру кезінде келесі ұяшықтағы сілтеме түрі","opts":["B2","A2","B$2","$A2"],"ans":1},
+  {"id":178,"topic":"web","q":"WEB бетті алу үшін жазылған дұрыс HTML коды:","visual":`<div class="preview-box"><div style="font-weight:bold;margin-bottom:6px;color:#cbd5e1;">Компьютер жадысы</div><ul style="margin:0;padding-left:20px;color:#94a3b8;font-size:0.92rem;"><li>Ішкі жад<ol style="margin:4px 0 6px 15px;"><li>RAM</li><li>ROM</li><li>Кэш-жад</li></ol></li><li>Сыртқы жад<ol style="margin:4px 0 6px 15px;"><li>Hard drive</li><li>Флэш-жад</li><li>Диск</li></ol></li></ul></div>`,"opts":["DL тегтері арқылы жазылған нұсқа","UL ішінде екі LI және ішкі OL тізімдерімен берілген нұсқа","OL ішінде екі LI және ішкі UL тізімдерімен берілген нұсқа","OL type='A' арқылы берілген нұсқа"],"ans":1},
+  {"id":179,"topic":"web","q":"Келесі кодта стиль басым болады:","code":"HTML:\n<p id=\"text\" class=\"note\" style=\"color: blue;\">Мәтін</p>\nCSS:\np { color: red; }\n.note { color: green; }\n#text { color: orange; }","opts":["Қызыл","Жасыл","Көк","Сары"],"ans":2},
+  {"id":180,"topic":"hardware","q":"Бір мезетте бірнеше қосымшаның жұмыс жасауына мүмкіндік береді","opts":["ядролардың саны","деректер алмасу жылдамдығы","процессор жиілігі","жадының жылдамдығы"],"ans":0},
+  {"id":181,"topic":"logic","q":"=СЧЁТЕСЛИ (В1:В10;\">25\") функциясы есептейді","opts":["В1:В10 аралығындағы 25-ке тең сандардың жалпы саны","В1:В10 аралығындағы 25-тен үлкен немесе тең сандардың жалпы саны","B1:B10 аралығындағы 25-тен үлкен сандардың жалпы саны","B1:B10 аралығындағы 25-тен үлкен сандардың қосындысы"],"ans":2},
+  {"id":182,"topic":"network","q":"Бірнеше хаттамаларды біріктіретін Wi-Fi сымсыз желісінің ресми атауы","opts":["IEEE 802.11 хаттама","IEEE 402.11 хаттама","IEEE 401.11 хаттама","IEEE 601.11 хаттама"],"ans":0},
+  {"id":183,"topic":"ai","q":"Экран бетінде көрсетілген бейненің ең кіші элементі","opts":["вектор","пиксель","сурет","кесінде"],"ans":1},
+  {"id":184,"topic":"sql","q":"Access деректер қорындағы тек қана екі мәні бар өріс типі","opts":["OLE типі","есептегіш типі","МЕМО типі","логикалық"],"ans":3},
+  {"id":185,"topic":"logic","q":"158₁₀ санының екілік жүйедегі мәні","opts":["10001111₂","10011110₂","11100011₂","10010111₂"],"ans":1},
+  {"id":186,"topic":"python","q":"print(\"Программалау\" [1:10:3]) программасының нәтижесі","opts":["ррма","ррм","пгм","пгмл"],"ans":0},
+  {"id":187,"topic":"sql","q":"'SELECT * FROM cars WHERE model LIKE 'A%' сұранысының нәтижесі","opts":["барлық көлік моделін шығарады","көлік моделінде А таңбасынан кейін сандар кездесетін жазбаларды шығарады","көлік моделі А таңбасы ғана тұратын жазбаларды шығарады","көлік моделі А таңбасынан басталатын жазбаларды шығарады"],"ans":3},
+  {"id":188,"topic":"python","q":"N айнымалысының мәні 97 болғанда, алынатын нәтиже:","code":"N = int(input())\ns = 0\np = 1\nwhile N != 0:\n    s += N % 3 * p\n    p *= 10\n    N = N // 3\nprint(s)","opts":["10121","12312","10000","11221"],"ans":0},
+  {"id":189,"topic":"hardware","q":"І буын компьютерлерінің элементтік базасы","opts":["үлкен интегралдық схема","электрондық шамдар","жартылай өткізгіштер","интегралдық микросхема"],"ans":1},
+  {"id":190,"topic":"security","q":"Криптографтың ашық мәтінге қолданған амалынан кейінгі нәтижесі","opts":["криптоанализ","әліпби","криптограмма","кілт"],"ans":2},
+  {"id":191,"topic":"hardware","q":"Компьютердегі ақпаратты түрлендірудің арифметикалық және логикалық операцияларын орындайтын бөлік","opts":["БҚ","РЕГИСТР","ШИНА","АЛҚ"],"ans":3},
+  {"id":192,"topic":"network","q":"Компьютермен ғаламторға шығуға мүмкіндік беретін құрылғы","opts":["коммутатор","модем","бағдарлауыш","желілік түйін"],"ans":1},
+  {"id":193,"topic":"sql","q":"«employee» кестесінен «нәтиже» кестесін алу үшін жазылған дұрыс сұраныс:","visual":`<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;"><table class="grid-table" style="flex:1;"><thead><tr><th>id</th><th>first_name</th><th>salary</th></tr></thead><tbody><tr><td>1</td><td>Raim</td><td>800000</td></tr><tr><td>2</td><td>Artur</td><td>750000</td></tr><tr><td>3</td><td>Darkhan</td><td>770000</td></tr><tr><td>4</td><td>Ainur</td><td>300000</td></tr><tr><td>5</td><td>Dariga</td><td>800000</td></tr></tbody></table><table class="grid-table" style="flex:1;"><thead><tr><th>first_name (сұрыпталған)</th><th>salary</th></tr></thead><tbody><tr><td>Ainur</td><td>300000</td></tr><tr><td>Artur</td><td>750000</td></tr><tr><td>Dariga</td><td>800000</td></tr><tr><td>Darkhan</td><td>770000</td></tr><tr><td>Raim</td><td>800000</td></tr></tbody></table></div>`,"opts":["SELECT * FROM employee ORDER BY first_name, salary;","SELECT first_name, salary FROM employee GROUP BY id HAVING AVG(age);","SELECT * FROM employee GROUP BY id, salary;","SELECT first_name, salary FROM employee HAVING AVG(salary);"],"ans":0},
+  {"id":194,"topic":"web","q":"CSS селекторы нақты қай элементтерге әсер ететінін талдаңыз:","code":"input[type^=\"tel\"] {\n    border: 2px dashed orange;\n}","opts":["type мәнінде \"tel\" кездесетін барлық <input> тегіне","барлық type атрибуты бар <input> тегтеріне","тек type=\"tel\" болатын барлық <input> өрісіне және формаға","тек name=\"phone\" мәні бар <input> тегіне"],"ans":0},
+  {"id":195,"topic":"logic","q":"148₁₀ санының екілік жүйедегі мәні","opts":["10010100₂","11101110₂","11001111₂","11100011₂"],"ans":0},
+  {"id":196,"topic":"logic","q":"Ақпаратты үлкен өлшем бірлігінен кіші өлшем бірлігіне аудару үшін қолданылатын амал","opts":["көбейту","қосу","азайту","бөлу"],"ans":0},
+  {"id":197,"topic":"python","q":"Программаға 9 11 25 37 54 96 100 сандары берілген кезде, алынатын нәтиже:","code":"import math\narr = list(map(int, input().split()))\nfor i in arr:\n    z = 0\n    for j in range(2, int(math.sqrt(i)) + 1):\n        if i % j == 0:\n            z = 1; break\n    if z == 0:\n        print(i, end=\" \")","opts":["25 37 54 96","11 37","9 25 100","9 11"],"ans":1},
+  {"id":198,"topic":"logic","q":"Ұяшықтағы формулада мән берілмеген жағдайдағы қате бейнесі","opts":["#Пусто!","#Число!","#Дел/0!","#Н/Д"],"ans":0},
+  {"id":199,"topic":"security","q":"Ақпараттың тұтастығының бұзылуына алып келеді","opts":["компьютердің істен шығуы","веб-сайт қолданушысының сұранысына жауап бермеуі","құпия ақпараттың жария болуы","ақпараттың бұрмалануы"],"ans":3},
+  {"id":200,"topic":"logic","q":"¬A ∧ B ∧ C ∨ ¬A ∨ B ∨ C логикалық өрнегі үшін құрылған ақиқат кестесінің соңғы бағанындағы «жалған» пікірлер саны","opts":["1","5","7","3"],"ans":0},
+  {"id":201,"topic":"security","q":"Ақпаратты түрлендіру арқылы оны қорғау әдісімен және өзгертумен шұғылданатын ғылым","opts":["криптоталдау","криптоинженерия","криптология","криптография"],"ans":3},
+  {"id":202,"topic":"ai","q":"Суретті түзу және қисық сызықтардың көмегімен координаталар арқылы салу","opts":["фрактальдық графика","растрлық графика","векторлық графика","графикалық редактор"],"ans":2},
+  {"id":203,"topic":"logic","q":"Excel электрондық кестесіндегі ұяшық адрестері мен функция шақыру қатары","opts":["қалып-күй қатары","формулалар қатары","жұмыс парағы","тақырып қатары"],"ans":1},
+  {"id":204,"topic":"ai","q":"Түрлі сценарийлерге қатысты бейнеклиптерді өңдеу барысында дыбыстар, суреттер, әсерлер мен өтулер, мәтін қосу","opts":["монтаждау жоспарын құру","бейнені монтаждау","бейнені түрлендіру","бейнеге дыбыс қосу"],"ans":1},
+  {"id":205,"topic":"python","q":"n = 25 болған кезде алынатын нәтиже:","code":"def F(x):\n    s = ''\n    while x > 0:\n        s = s + str(x % 2)\n        x = x // 2\n    print(s[::-1])\nn = int(input())\nF(n)","opts":["1000","11011","00011","11001"],"ans":3},
+  {"id":206,"topic":"python","q":"Программаның орындалуы аяқталған соң, x айнымалысының мәнін анықтаңыз, мұндағы N = 3:","code":"N = int(input())\ni = j = x = 0\nfor i in range(1, N + 1):\n    for j in range(i + 1, N + 1 - i):\n        x += 1\nprint(x)","opts":["10","100","5","1"],"ans":3},
+  {"id":207,"topic":"python","q":"a = 7, b = 3, c = 4 болған кезде алынатын нәтиже:","code":"a = int(input()); b = int(input()); c = int(input())\nif a % 2 == 0:\n    if b % 2 == 1:\n        k = b // c\n    else:\n        k = a // c\nelse:\n    k = (a + b) % c\nprint(k)","opts":["2","10","1","14"],"ans":0},
+  {"id":208,"topic":"logic","q":"¬A ∧ ¬B ∨ B ∨ A ∧ C логикалық өрнегі үшін құрылған ақиқат кестесінің соңғы бағанындағы «жалған» пікірлер саны","opts":["6","1","0","4"],"ans":1},
+  {"id":209,"topic":"sql","q":"Мағлұматтарды деректер базасында сақтайтын ақпараттық жүйенің элементі","opts":["өріс","атрибут","жазба","нысан"],"ans":2},
+  {"id":210,"topic":"logic","q":"6541₈ санының оналтылық жүйедегі мәні","opts":["14F0₁₆","EFF1₁₆","E91₁₆","D61₁₆"],"ans":3},
+  {"id":211,"topic":"web","q":"Параграф белгісінің HTML тіліндегі жазылуы","opts":["&reg;","&sect;","&copy;","&deg;"],"ans":1},
+  {"id":212,"topic":"ai","q":"Жасанды нейронды желі моделіндегі синапс саны:","visual":`<div style="text-align:center;margin:10px 0;"><svg viewBox="0 0 340 180" style="max-width:320px;height:auto;background:#0f172a;border-radius:8px;border:1px solid #334155;padding:10px;"><circle cx="40" cy="30" r="12" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/><text x="40" y="34" fill="#f8fafc" font-size="10" text-anchor="middle" font-family="monospace">X₁</text><circle cx="40" cy="70" r="12" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/><text x="40" y="74" fill="#f8fafc" font-size="10" text-anchor="middle" font-family="monospace">X₂</text><circle cx="40" cy="110" r="12" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/><text x="40" y="114" fill="#f8fafc" font-size="10" text-anchor="middle" font-family="monospace">X₃</text><circle cx="40" cy="155" r="12" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/><text x="40" y="159" fill="#f8fafc" font-size="10" text-anchor="middle" font-family="monospace">X_n</text><line x1="52" y1="30" x2="180" y2="90" stroke="#f59e0b" stroke-width="2"/><text x="105" y="52" fill="#f59e0b" font-size="11" font-weight="bold">W₁</text><line x1="52" y1="70" x2="180" y2="90" stroke="#f59e0b" stroke-width="2"/><text x="105" y="76" fill="#f59e0b" font-size="11" font-weight="bold">W₂</text><line x1="52" y1="110" x2="180" y2="90" stroke="#f59e0b" stroke-width="2"/><text x="105" y="104" fill="#f59e0b" font-size="11" font-weight="bold">W₃</text><line x1="52" y1="155" x2="180" y2="90" stroke="#f59e0b" stroke-width="2"/><text x="105" y="138" fill="#f59e0b" font-size="11" font-weight="bold">W_n</text><circle cx="200" cy="90" r="30" fill="#1e293b" stroke="#a855f7" stroke-width="3"/><text x="200" y="97" fill="#f8fafc" font-size="20" font-weight="bold" text-anchor="middle">S</text><line x1="230" y1="90" x2="290" y2="90" stroke="#10b981" stroke-width="3"/><circle cx="300" cy="90" r="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/><text x="320" y="94" fill="#10b981" font-size="13" font-weight="bold">Y</text></svg></div>`,"opts":["4","1","6","5"],"ans":0},
+  {"id":213,"topic":"ai","q":"Векторлық графиканың растрлық графикадан басты айырмашылығы","opts":["растрлық кескінді бейнелеуде графикалық примитивтер тәсілі қолданылады","векторлық кескін үш өлшемді графикада жиі қолданылады","векторлық кескіннің файл өлшемі растрлыққа қарағанда көп болып келеді","векторлық кескіндер суретті үлкейту және кішірейту кезінде сапасын сақтайды"],"ans":3},
+  {"id":214,"topic":"security","q":"Хабарламаны шифрлау мен шифрдан ашуға бір ғана кілт қолданады","opts":["симметриялық шифрлау","криптограмма","криптоанализ","асимметриялық шифрлау"],"ans":0},
+  {"id":215,"topic":"python","q":"Программада 9, 1, 21, 30, 45 сандары берілгенде алынатын нәтиже:","code":"N = 5\ns = 0\nfor i in range(1, N + 1):\n    x = int(input())\n    if x % 2 == 1:\n        x //= 10\n        s += x % 10\nprint(s)","opts":["3","9","6","8"],"ans":2},
+  {"id":216,"topic":"logic","q":"ASCII кодтар кестесінде ондық коды 90 болатын «Z» символының екілік коды","opts":["0101 1001","0101 1011","1010 0101","0101 1010"],"ans":3},
+  {"id":217,"topic":"logic","q":"DEF₁₆ санының екілік жүйедегі мәні","opts":["111100111011₂","110111101110₂","110111101111₂","111001001100₂"],"ans":2},
+  {"id":218,"topic":"logic","q":"Санның таңбасын анықтайтын математикалық функция","opts":["ABS(сан, таңба)","ЗНАК(сан)","ABS(сан)","ЗНАК(сан, таңба)"],"ans":1},
+  {"id":219,"topic":"sql","q":"Кестедегі жазба саны және өріс саны:","visual":`<table class="grid-table"><thead><tr><th>№</th><th>Аты-жөні</th><th>Тесттен алған балы</th><th>Жалпы балы</th><th>Пайызы</th></tr></thead><tbody><tr><td>1</td><td>Жәнібек</td><td>1,0</td><td>746</td><td>67</td></tr><tr><td>2</td><td>Майра</td><td>0</td><td>750</td><td>62</td></tr><tr><td>3</td><td>Айжан</td><td>1,0</td><td>746</td><td>100</td></tr></tbody></table>`,"opts":["4,4","3,4","4,5","3,5"],"ans":3},
+  {"id":220,"topic":"logic","q":"В2 ұяшығындағы формуланы А2 ұяшығына көшірген кезде А2 ұяшығынан алынатын мән:","visual":`<table class="excel-table"><thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead><tbody><tr><td class="row-num">1</td><td>10</td><td>8</td><td>7</td><td>3</td></tr><tr><td class="row-num">2</td><td style="background:#0369a1;color:#fff;font-weight:bold;">?</td><td>=C$2-D$2</td><td>4</td><td>0</td></tr><tr><td class="row-num">3</td><td>15</td><td>12</td><td>7</td><td>4</td></tr><tr><td class="row-num">4</td><td>6</td><td>14</td><td>5</td><td>2</td></tr></tbody></table>`,"opts":["0","3","5","7"],"ans":0},
+  {"id":221,"topic":"python","q":"Нәтижесін анықтаңыз:","code":"s = 0\nfor i in range(5, -1, -1):\n    s = s + i\nprint(s)","opts":["15","программа орындалмайды","14","5"],"ans":0},
+  {"id":222,"topic":"sql","q":"SQL сұранысында шартты көрсету үшін қолданылатын кілттік сөз:\nSELECT COUNT(*) FROM enter WHERE amount > 5000","opts":["SELECT","FROM","WHERE","COUNT"],"ans":2},
+  {"id":223,"topic":"security","q":"Бөгде адамдардың ақпаратты пайдалануы шектелген жағдайды білдіреді","opts":["ақпараттың құпиялылығы","ақпараттың ашықтығы","ақпараттың тұтастығы","ақпараттың қолжетімділігі"],"ans":0},
+  {"id":224,"topic":"logic","q":"ASCII стандартында «computer» мәтіндік ақпаратының көлемі","opts":["8 бит","64 бит","8192 бит","56 бит"],"ans":1},
+  {"id":225,"topic":"logic","q":"Компьютерде ұсынылатын ақпараттың ең кіші өлшем бірлігі","opts":["Мбайт","бит","байт","Кбайт"],"ans":1},
+  {"id":226,"topic":"logic","q":"Ұяшықтағы формуланы программа дұрыс анықтай алмай, «#Имя?» қатесі шығу себебі:","opts":["Нөлге бөлу берілген","Қате аргумент немесе оператор енгізілген","Мүмкін емес мән көрсетілген","Мәнді алу барысындағы қателік"],"ans":1},
+  {"id":227,"topic":"web","q":"HTML құжатта қолданылған атрибуттар саны:","code":"<html>\n<body>\n  <img src=\"myphoto.jpg\">\n  <h1>This is website</h1>\n  <a href=\"mysite.com\">Click here</a>\n</body>\n</html>","opts":["2","6","1","4"],"ans":0},
+  {"id":228,"topic":"python","q":"Программаға 3 саны берілген кезде алынатын нәтиже:","code":"a = int(input())\nif a == 0:\n    print(0)\nelse:\n    if a > 0:\n        print(1)\n    else:\n        print(-1)","opts":["1","0","-1","2"],"ans":0},
+  {"id":229,"topic":"ai","q":"Мультимедиа бейнефильм нәтижесінде қандай болу керектігін сипаттайтын кезең","opts":["объектке дыбыс қосу","монтаждау жоспарын құру","объектке сурет қосу","бейнені түрлендіру"],"ans":1},
+  {"id":230,"topic":"web","q":"Нөмірленген тізімде белгілі бір саннан бастау қажет болғандағы <ol> тегінің атрибуты","opts":["align","type","start","colspan"],"ans":2},
+  {"id":231,"topic":"network","q":"Компьютерлік желілерде пайдалануға арналған бұралған жұп түріндегі кабель","opts":["есулі қосақ","САТ5 кабелі","талшықты-оптикалық кабель","телефон торабы"],"ans":0},
+  {"id":232,"topic":"network","q":"Жергілікті желілерде қолданылатын Wi-Fi желісі","opts":["WMAN","WPAN","WWAN","WLAN"],"ans":3},
+  {"id":233,"topic":"sql","q":"SQL операторындағы LIKE өрнегінде кез келген бір таңбаны көрсететін арнайы таңба","opts":["[?]","[]","_","%"],"ans":2},
+  {"id":234,"topic":"sql","q":"«Нәтиже» кестесін алу үшін employee кестесіне жасалатын SQL сұранысы:","visual":`<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;"><table class="grid-table" style="flex:1;"><thead><tr><th>id</th><th>first_name</th><th>salary</th></tr></thead><tbody><tr><td>0</td><td>Musa</td><td>1000</td></tr><tr><td>1</td><td>Adam</td><td>4000</td></tr><tr><td>2</td><td>Arman</td><td>5000</td></tr><tr><td>3</td><td>Musa</td><td>1000</td></tr><tr><td>4</td><td>Adina</td><td>5000</td></tr><tr><td>5</td><td>Dina</td><td>3000</td></tr><tr><td>6</td><td>Danial</td><td>1000</td></tr></tbody></table><table class="grid-table" style="flex:1;"><thead><tr><th>count(id)</th><th>salary</th></tr></thead><tbody><tr><td>3</td><td>1000</td></tr><tr><td>1</td><td>3000</td></tr><tr><td>1</td><td>4000</td></tr><tr><td>2</td><td>5000</td></tr></tbody></table></div>`,"opts":["select id, salary from employee order by salary;","select * from employee where salary = 1000;","select count(id), salary from employee group by salary;","select sum(id), salary from employee group by salary having count(salary);"],"ans":2},
+  {"id":235,"topic":"ai","q":"Ақпараттарды ұқсастығы бойынша топтарға бөлу","opts":["анықтау","жіктеу","кластерлеу","табу"],"ans":2},
+  {"id":236,"topic":"hardware","q":"Фон операциясын орындауға қатысатын арифметикалық-логикалық құрылғы","opts":["командалар регистрі","командалар есептеуіші","сумматор","шина"],"ans":2},
+  {"id":237,"topic":"hardware","q":"Процессордың бір секундта орындай алатын операциялар саны","opts":["ядро саны","тактілік жиілік","разрядтылығы","кэш жады"],"ans":1},
+  {"id":238,"topic":"hardware","q":"Адамзат тарихындағы ең алғашқы есептеу құралы","opts":["соробан","суан-пан","есепшот","абак"],"ans":3},
+  {"id":239,"topic":"ai","q":"Векторлық графикалық редакторда объектілердің қабаттасу ретін өзгерту амалы","opts":["қабаттар ретін өзгерту","қаріптің қалыңдығын анықтау","масштабтық тексеру","арнайы мәтінмен қаптау"],"ans":0},
+  {"id":240,"topic":"logic","q":"A ∨ ¬B ∧ C → B логикалық өрнегі үшін құрылған ақиқат кестесінде жалған болатын мәндер саны","opts":["0","6","2","3"],"ans":2},
+  {"id":241,"topic":"logic","q":"Он алтылық санау жүйесіндегі D әрпінің ондық мәні","opts":["22","14","11","13"],"ans":3},
+  {"id":242,"topic":"web","q":"HTML және CSS кодының нәтижесі (блоктардың орналасуы):","code":".shape { position: relative; width: 220px; height: 220px; }\n.box { width: 100px; height: 100px; position: absolute; border: 2px solid black; }\n.red { background-color: red; left: 0; top: 0; }\n.blue { background-color: blue; left: 100px; top: 0; }\n.green { background-color: olive; left: 0; top: 100px; }","visual":`<div style="display:flex;gap:14px;flex-wrap:wrap;margin:12px 0;"><div style="border:2px solid #38bdf8;padding:6px;border-radius:6px;background:#0f172a;text-align:center;"><div style="font-weight:bold;color:#38bdf8;font-size:0.85rem;margin-bottom:4px;">A нұсқасы (Дұрыс)</div><div style="position:relative;width:120px;height:120px;background:#1e293b;border:1px solid #475569;"><div style="position:absolute;left:0;top:0;width:55px;height:55px;background:#ef4444;border:1px solid #000;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;">red</div><div style="position:absolute;left:55px;top:0;width:55px;height:55px;background:#3b82f6;border:1px solid #000;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;">blue</div><div style="position:absolute;left:0;top:55px;width:55px;height:55px;background:#84cc16;border:1px solid #000;display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;">olive</div></div></div></div>`,"opts":["Жоғарғы сол: қызыл (0,0), жоғарғы оң: көк (100,0), төменгі сол: зәйтүн (0,100)","Жоғарғы сол: күлгін, жоғарғы оң: қызыл, төменгі оң: зәйтүн","Жоғарғы сол: қызыл, жоғарғы оң: зәйтүн, төменгі оң: күлгін","Жоғарғы сол: күлгін, жоғарғы оң: қызыл, төменгі сол: жасыл"],"ans":0},
+  {"id":243,"topic":"logic","q":"A ∨ ¬B ∧ C → C логикалық өрнегі үшін құрылған ақиқат кестесінде жалған болатын мәндер саны","opts":["2","4","0","3"],"ans":2},
+  {"id":244,"topic":"web","q":"CSS ережесі қай элементтерге қолданылады:\nul li:first-child { font-weight: bold; }","opts":["барлық <li> тегтеріне","әр <ul> тізімінің соңғы элементіне","барлық <ul> элементтеріне","әр <ul> ішіндегі бірінші <li> тегіне"],"ans":3},
+  {"id":245,"topic":"python","q":"Символдармен жұмыс жасайтын арнайы кіріктірілген функция (кодты таңбаға айналдыру)","opts":["round()","chr()","divmod()","pow()"],"ans":1},
+  {"id":246,"topic":"python","q":"Берілген программа нәтижесі:","code":"s = \"AcCa aaAS aaaAa\"\nnew = \"\"\nfor c in s:\n    if c == \"a\":\n        c = \"b\"\n    new = new + c\nprint(new)","opts":["bCbb bAbS bbbb","bBbbbbbBBBBbb","AcTc aaAS aaaAa","AcCb bbAS bbbAb"],"ans":3},
+  {"id":247,"topic":"hardware","q":"1938 жылы Z1 компьютерінің программаланатын механикалық цифрлық үлгісін құрған неміс инженері","opts":["Чарльз Бэббидж","Блез Паскаль","Джон Атанасов","Конрад Цузе"],"ans":3},
+  {"id":248,"topic":"security","q":"Қазақстанда ЭЦҚ жүйесі енгізілген жыл","opts":["2002","2003","2005","2004"],"ans":1},
+  {"id":249,"topic":"sql","q":"Students және Courses кестелерін байланыстыратын аралық кесте","opts":["Students","Courses","Enrollments","first_name"],"ans":2},
+  {"id":250,"topic":"python","q":"Санның абсолюттік мәнін (модулін) анықтайтын Python функциясы","opts":["upper()","isupper()","abs()","int()"],"ans":2},
+  {"id":251,"topic":"web","q":"Видеофайлдың абсолютті немесе салыстырмалы URL адресін анықтайтын атрибут","opts":["controls","video","src","href"],"ans":2},
+  {"id":252,"topic":"web","q":"HTML код фрагменті арқылы құрылған тізім түрі:\n<ol>\n<li>Astana</li>\n<li>Almaty</li>\n<li>Shymkent</li>\n</ol>","opts":["аралас тізім","маркерленген тізім","көп деңгейлі тізім","нөмірленген тізім"],"ans":3},
+  {"id":253,"topic":"logic","q":"F = ¬A ∧ B логикалық өрнегінің ақиқат кестесіндегі мәндері (00, 01, 10, 11 ретімен)","opts":["0, 1, 0, 0","0, 0, 1, 1","1, 0, 1, 1","1, 0, 1, 0"],"ans":0},
+  {"id":254,"topic":"hardware","q":"Монитордың негізгі қызметі","opts":["енгізу","форматтау","шығару немесе көрсету","жинақтау"],"ans":2},
+  {"id":255,"topic":"web","q":"Жүгіртпе мәтін құратын HTML тег","opts":["<a>...</a>","<p align=\"center\">...</p>","<ul>...</ul>","<marquee>...</marquee>"],"ans":3},
+  {"id":256,"topic":"sql","q":"Атының екінші әрпі «р» болатын студенттерді шығару үшін жазылатын дұрыс SQL сұраным","opts":["SELECT name FROM students WHERE name LIKE 'p_%';","SELECT name FROM students WHERE name LIKE '%';","SELECT name FROM students WHERE name LIKE '_p%';","SELECT name FROM students WHERE name LIKE '%p_';"],"ans":2},
+  {"id":257,"topic":"python","q":"A = 21 берілгендегі программаның нәтижесі:","code":"A = int(input())\nif A == 0: print(0)\nelse:\n    f1, f2 = 0, 1\n    n = 1\n    while f2 < A:\n        f1, f2 = f2, f1 + f2\n        n += 1\n    if f2 == A: print(n)\n    else: print(-1)","opts":["7","6","8","10"],"ans":2},
+  {"id":258,"topic":"ai","q":"Фотосуреттерді сапасын жақсы сақтап, файл көлемін ықшамдап сақтайтын графикалық формат","opts":["bmp","swf","gif","jpeg"],"ans":3},
+  {"id":259,"topic":"logic","q":"MS Excel-де A1 = 50, B2 = 51, ал C2 ұяшығында =A1+B2 формуласы берілген. C2 ұяшығының мәні","opts":["50","101","151","100"],"ans":1},
+  {"id":260,"topic":"python","q":"Бағалау шарттарына сәйкес дұрыс алгоритм:\nball <= 10 нәтижесі 5; ball <= 7 нәтижесі 4; ball <= 5 нәтижесі 3","opts":["if ball <= 10: print(5); elif ball <= 7: print(4); elif ball <= 5: print(3)","if ball <= 5: print(3); elif ball <= 7: print(4); elif ball <= 10: print(5)","if ball >= 10: print(5); elif ball >= 7: print(4); elif ball >= 5: print(3)","if ball < 5: print(5); elif ball < 7: print(4); elif ball < 10: print(3)"],"ans":1},
+  {"id":261,"topic":"logic","q":"Уақыт бойынша өзгеріп отыратын, үнемі жаңарып тұратын деректер түрі","opts":["кинетикалық","тұрақты","статикалық","динамикалық"],"ans":3},
+  {"id":262,"topic":"sql","q":"SQL тілінде нәтижені белгілі бір өріс бойынша сұрыптау үшін қолданылатын команда","opts":["SELECT FROM","WHERE","ORDER BY","ALTER TABLE"],"ans":2},
+  {"id":263,"topic":"logic","q":"Негізгі логикалық операциялар қатары","opts":["импликация, дизъюнкция, терістеу","конъюнкция, импликация, терістеу","конъюнкция, дизъюнкция, импликация","конъюнкция, дизъюнкция, терістеу"],"ans":3},
+  {"id":264,"topic":"web","q":"CSS-ті HTML құжатына мына код арқылы қосу стилі:\n<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">","opts":["құжат ішіндегі стиль","сыртқы стиль","құжат басындағы стиль","ішкі стиль"],"ans":1},
+  {"id":265,"topic":"hardware","q":"Процессордағы транзистор өлшемінің өлшем бірлігі","opts":["микрон","аталық","тереңдік","нанометр"],"ans":3},
+  {"id":266,"topic":"logic","q":"8 биттік екілік код арқылы белгіленетін мүмкін комбинациялар саны","opts":["2⁵","2⁸","2¹⁶","2³²"],"ans":1},
+  {"id":267,"topic":"logic","q":"Компьютерлік ақпаратты өлшеудің ең кіші бірлігі","opts":["мегабайт","килобайт","бит","байт"],"ans":2},
+  {"id":268,"topic":"sql","q":"SQL кодындағы students кестесінің өрістер саны:","code":"create table students (\n  student_id int(10),\n  student_name varchar(50),\n  age int,\n  course_name varchar(20),\n  dateOfBirth date\n);","opts":["5","7","4","6"],"ans":0},
+  {"id":269,"topic":"python","q":"Нәтижесін анықтаңыз:\nstr = 'ИНФОРМАТИКА!!!'\nprint(str[0:10])","opts":["Информатика","Информатик","Информация","Информатика!"],"ans":1},
+  {"id":270,"topic":"logic","q":"MS Excel-де сұрыптаудың негізгі түрлері саны","opts":["9","4","2","3"],"ans":2},
+  {"id":271,"topic":"python","q":"Ассоциативті массив ұғымы","opts":["компьютерде сипатталған барлық дерек массиві","кілттік құрылымдар арасында сәйкестікті анықтау (кілт-мән жұбы)","ақпараттық қауіпсіздікті қамтамасыз етуге бағытталған шаралар","белгілі бір тұжырым немесе олардың ақиқат мәніндегі процестер"],"ans":1},
+  {"id":272,"topic":"logic","q":"∨ белгісіне сәйкес келетін логикалық операция түрі","opts":["немесе","және","терістеу","емес"],"ans":0},
+  {"id":273,"topic":"hardware","q":"Бір тактте өңдей алатын биттер санының анықталуы","opts":["көп ядро","құрылғы саны","разрядтылығы","тактілік жиілігі"],"ans":2},
+  {"id":274,"topic":"logic","q":"Мәтін 4 беттен тұрады. Әр бетте 8 жол, әр жолда 20 символ бар. Әр символ 1 байтпен кодталады. Мәтіннің ақпарат көлемін анықтаңыз (байтпен).","opts":["320","200","640","970"],"ans":2},
+  {"id":275,"topic":"logic","q":"Екілік 8-биттік жүйеде мүмкін болатын комбинациялар саны","opts":["2³","2¹⁶","2⁸","2³²"],"ans":2},
+  {"id":276,"topic":"python","q":"Бір шарттың орындалуы немесе орындалмауына байланысты тармақталатын құрылым","opts":["сызықтық алгоритм","циклдік алгоритм","тармақталған алгоритм","қайталану алгоритмі"],"ans":2},
+  {"id":277,"topic":"sql","q":"MySQL тілінде бір немесе бірнеше баған бойынша топтастыру үшін қолданылатын оператор","opts":["WHERE","GROUP BY","ORDER BY","HAVING"],"ans":1},
+  {"id":278,"topic":"ai","q":"Машиналық оқытуда алдын ала белгіленген деректер арқылы оқыту түрі","opts":["мұғаліммен оқыту","градиент","аралас интеграциялы оқыту","бейнемен оқыту"],"ans":0},
+  {"id":279,"topic":"web","q":"CSS-ті HTML-де қосудың түрі:\n<p style=\"font-size:120%; font-family:monospace; color:red;\">","opts":["құжат доменіндегі стиль","ішкі стиль","сыртқы стиль","құжат басындағы стиль"],"ans":1},
+  {"id":280,"topic":"ai","q":"Видеоны өңдеуге және монтаж жүргізуге арналған бағдарлама","opts":["Photoshop","Paint","Inkscape","Premiere Pro"],"ans":3},
+  {"id":281,"topic":"network","q":"Бір ғимарат немесе шағын аумақ көлеміндегі компьютерлік желі","opts":["MAN","WAN","CAN","LAN"],"ans":3},
+  {"id":282,"topic":"network","q":"Желідегі ақпаратты тасымалдау жылдамдығының өлшемі","opts":["1 секундтағы байттар саны","разрядтылығы","1 секундтағы биттер саны","тактілік жиілігі"],"ans":2},
+  {"id":283,"topic":"web","q":"CSS-ті HTML-де қосу тәсілдері","opts":["барлық стильдер, стильді жариялау","құжат басында, құжат соңында","ғаламдық стиль, байланыс стиль","ішкі стиль, құжат деңгейіндегі стиль, сыртқы стиль"],"ans":3},
+  {"id":284,"topic":"python","q":"Программаның нәтижесін анықтаңыз:","code":"x = 0\nwhile x < 10:\n    print(x, end=\" \")\n    if x == 4:\n        break\n    x += 1\nelse:\n    print(\"Санау аяқталды\")","opts":["0 1 2 3 4","0 1 2 3 4 5 6 7 8 9 Санау аяқталды","1 2 3 4 5 6 7 8 9 Санау аяқталды","1 2 3 4 Санау аяқталды"],"ans":0},
+  {"id":285,"topic":"logic","q":"Санау жүйесінің негізі бола алмайтын сан","opts":["4","1","2","8"],"ans":1},
+  {"id":286,"topic":"ai","q":"Фотосурет салуға және өңдеуге, логотип жасауға арналған графикалық редактор","opts":["mypaint","the gimp","pixbuilder","smoothdraw"],"ans":1},
+  {"id":287,"topic":"web","q":"HTML-де ең үлкен тақырып өлшемін беретін тег","opts":["<H1>","<B>","<H6>","<BR>"],"ans":0},
+  {"id":288,"topic":"web","q":"Web-құжатты стильдік безендіру үшін қажет файл кеңейтілімі","opts":["XML","PHP","HTML","CSS"],"ans":3},
+  {"id":289,"topic":"web","q":"Жылжымалы мәтін құру үшін қолданылатын HTML тегі","opts":["<td>","<track>","<tr>","<marquee>"],"ans":3},
+  {"id":290,"topic":"security","q":"Құжатта немесе жүйеде қолданушыны сенімді анықтау әдісі","opts":["пароль арқылы қорғау","құпия ақпаратты қолдану","биометриялық тексеру","арнайы интерфейс қолдану"],"ans":2},
+  {"id":291,"topic":"logic","q":"Кестелік процессордағы негізгі логикалық функциялар саны","opts":["4","3","5","2"],"ans":1},
+  {"id":292,"topic":"logic","q":"Электрондық кестедегі статистикаға қатысты функция","opts":["СТАНДО()","ДЛИТО","ВРЕМЯ()","ОСТАТОК"],"ans":0},
+  {"id":293,"topic":"sql","q":"SQL кестенің құрылымын өзгерту үшін қолданылатын команда","opts":["WHERE","ORDER BY","ALTER TABLE","SELECT FROM"],"ans":2},
+  {"id":294,"topic":"logic","q":"Ұяшықтарды көлденең, тігінен туралау және біріктіру параметрлері орналасқан бөлім:","visual":`<div style="display:inline-flex;background:#334155;border-radius:6px;padding:3px;gap:2px;font-size:0.85rem;margin:8px 0;flex-wrap:wrap;"><span style="padding:4px 8px;border-radius:4px;color:#94a3b8;">Число</span><span style="padding:4px 8px;border-radius:4px;background:#0284c7;color:#fff;font-weight:bold;">Выравнивание</span><span style="padding:4px 8px;border-radius:4px;color:#94a3b8;">Шрифт</span><span style="padding:4px 8px;border-radius:4px;color:#94a3b8;">Граница</span><span style="padding:4px 8px;border-radius:4px;color:#94a3b8;">Заливка</span><span style="padding:4px 8px;border-radius:4px;color:#94a3b8;">Защита</span></div>`,"opts":["выравнивание","шрифт","число","граница"],"ans":0},
+  {"id":295,"topic":"logic","q":"Ұяшықтағы мәліметтің горизонталь орналасу түрлері","opts":["жол, оң","оң, сол","жолы, бағаны","қатар, баған"],"ans":1},
+  {"id":296,"topic":"logic","q":"Қуаттылығы 64 символ болатын алфавиттің бір таңбасындағы ақпарат саны","opts":["6 бит","8 бит","4 бит","2 бит"],"ans":0},
+  {"id":297,"topic":"python","q":"Аргумент қабылдайтын және мән қайтаратын мысал","opts":["функция","цикл","оператор","айнымалы"],"ans":0},
+  {"id":298,"topic":"logic","q":"Ақпаратты 0 және 1 символдарымен жазатын код","opts":["он алтылық","екілік","сегіздік","ассемблер"],"ans":1},
+  {"id":299,"topic":"hardware","q":"1986-1994 жылдары ұсынылған компьютерлер буыны","opts":["I","V","III","IV"],"ans":1},
+  {"id":300,"topic":"logic","q":"Нақты объектінің құрылымын немесе процестің құрылымын көрсететін ұғым","opts":["функция","массив","формула","схема"],"ans":3},
+  {"id":301,"topic":"hardware","q":"Компьютер тікелей түсінетін тіл","opts":["машина коды","түрлендіру процедурасы","жинақ тілі","код жазылымы"],"ans":0},
+  {"id":302,"topic":"security","q":"Ақпаратқа рұқсатсыз қол жеткізуде қолданылатын әдіс","opts":["login","phishing","localhost","xml"],"ans":1},
+  {"id":303,"topic":"hardware","q":"Аналитикалық машинаны ойлап тапқан ғалым","opts":["Ада Лавлейс","Чарльз Бэббидж","Блез Паскаль","Конрад Цузе"],"ans":1},
+  {"id":304,"topic":"logic","q":"Excel электрондық кестесінде қате аргумент немесе операторлар пайдаланылғанда шығатын қате","opts":["#ДЕЛ/0!","#Знач!","#Ссылка!","#Дел/0!$$"],"ans":1},
+  {"id":305,"topic":"logic","q":"Хартли формуласына сәйкес символдың ақпараттық салмағы 8-ге тең болатын алфавиттің қуаттылығы","opts":["64","256","128","1024"],"ans":1},
+  {"id":306,"topic":"python","q":"Программаның нәтижесі:","code":"for i in range(1, 10):\n    if i != 4:\n        print(\"a\", end=\"\")\n    else:\n        break","opts":["aaaa","aaa","aaa $$","aaaa $$"],"ans":1},
+  {"id":307,"topic":"python","q":"Программа нәтижесі:","code":"a = \"informatika\"\nprint(a.islower())","opts":["INFORMATIKA","informatika$$","True","False"],"ans":2},
+  {"id":308,"topic":"security","q":"Қолданушыны аты, логині, кілті, паролі немесе карта арқылы тану түрі","opts":["биометриялық","атрибуттық","авторизациялық","аутентификациялық"],"ans":1},
+  {"id":309,"topic":"web","q":"Маркерленген тізім құруға арналған HTML тег","opts":["<ol>","<table>","<ul>","<video>"],"ans":2},
+  {"id":310,"topic":"network","q":"Компьютерлік желіде ақпаратты ұсыну, түрлендіру және жіберу стандарты","opts":["маска","протокол","домен","пакет"],"ans":1},
+  {"id":311,"topic":"logic","q":"217₁₀ санының сегіздік санау жүйесіндегі мәні","opts":["133","330","331","128"],"ans":2},
+  {"id":312,"topic":"logic","q":"Қуаттылығы 64 символ болатын алфавиттің бір символына сәйкес ақпарат мөлшері","opts":["4 бит","8 бит","2 бит","6 бит"],"ans":3},
+  {"id":313,"topic":"python","q":"n = 64 берілгендегі программаның нәтижесі:","code":"n = int(input())\na = n // 10\nb = n % 10\nprint(a)\nprint(b)","opts":["6, 4","6, 6","4, 4","4, 6"],"ans":0},
+  {"id":314,"topic":"logic","q":"Ақпараттың пайдаланушы үшін маңыздылығын, қажеттілігін білдіретін қасиеті","opts":["ақпараттың көлемділігі","ақпараттың тұтастығы","ақпараттың құндылығы","ақпараттың өзектілігі"],"ans":2},
+  {"id":315,"topic":"ai","q":"Суретке арнайы әсер беру командасы","opts":["чиптеу","бұрмалау","корректировка","эффекттер"],"ans":3},
+  {"id":316,"topic":"logic","q":"MS Excel-де шартты форматтау орналасқан бөлім","opts":["Число","Редактирование","Стили","Ячейки"],"ans":2},
+  {"id":317,"topic":"logic","q":"ASCII код кестесінде әрбір символға сәйкес келетін код түрі","opts":["ондық","екілік","сегіздік","он алтылық"],"ans":1},
+  {"id":318,"topic":"hardware","q":"Компьютердің барлық ішкі құрылғылары арасында ақпарат алмасуды қамтамасыз ететін бөлігі","opts":["жүйелік шина","сопроцессор","процессор интерфейсі","регистрлер"],"ans":0},
+  {"id":319,"topic":"hardware","q":"АҚШ-та жасалған бірінші буын электрондық компьютері","opts":["ABC","Z1","ENIAC","Mark-1"],"ans":2},
+  {"id":320,"topic":"logic","q":"Статистикалық функция нәтижесі (орташа мән)","opts":["19","18","21","17"],"ans":0},
+  {"id":321,"topic":"python","q":"Программаның нәтижесі:","code":"k = 14\nwhile k > 0:\n    print(\"mani:\", k)\n    k = k - 5\n    if k == 4:\n        break\nprint(\"end\")","opts":["mani: 14 mani: 9 mani: 4 end","mani: 14 mani: 9 end","mani: 14 mani: 4 end","mani: 14 end"],"ans":1},
+  {"id":322,"topic":"python","q":"Python тіліндегі бүтін бөлу операторы","opts":["/","//","%","**"],"ans":1},
+  {"id":323,"topic":"python","q":"Python тіліндегі қалдықты табу операторы","opts":["//","/","%","**"],"ans":2},
+  {"id":324,"topic":"sql","q":"Деректер қорындағы кестенің бағаны қалай аталады?","opts":["жазба","өріс","кілт","форма"],"ans":1},
+  {"id":325,"topic":"sql","q":"Деректер қорындағы кестенің жолы қалай аталады?","opts":["жазба","өріс","индекс","сұраныс"],"ans":0},
+  {"id":326,"topic":"logic","q":"Excel-де абсолютті сілтеме жазуда қолданылатын белгі","opts":["$","%","#","!"],"ans":0},
+  {"id":327,"topic":"logic","q":"F = A ∨ B есебінің ақиқат кестесі","opts":["0 0 1, 0 1 1, 1 0 1, 1 1 0","0 0 1, 0 1 0, 1 0 0, 1 1 0","0 0 0, 0 1 1, 1 0 1, 1 1 1","0 0 1, 0 1 0, 1 0 1, 1 1 1"],"ans":2},
+  {"id":328,"topic":"sql","q":"Белгілі қасиеті бар кестенің бағаны","opts":["жазба","өріс","атрибут","нысан"],"ans":1},
+  {"id":329,"topic":"sql","q":"Students кестесінен LIKE операторының көмегімен атауында \"жазба\" сөзі бар оқушылар жазбаларын шығару сұранысы","opts":["SELECT * FROM Students WHERE type LIKE 'жазба%'","FROM Students SELECT * WHERE type LIKE 'жазба %'","SELECT type FROM Students WHERE type LIKE 'жазба'","FROM Students SELECT type WHERE type = 'жазба %'"],"ans":0},
+  {"id":330,"topic":"network","q":"Көлемі 64 Мбайт болатын файлды 2 минутта желі бойынша тасымалдауға қажетті желінің өткізу қабілеті","opts":["4369 Кбит/с","32768 Кбит/с","540 Кбайт/с","546 Кбит/с"],"ans":0},
+  {"id":331,"topic":"hardware","q":"Бір мезгілде тек бір ғана тапсырманы орындай алатын операциялық жүйе","opts":["MS DOS","iOS","Mac","Windows"],"ans":0},
+  {"id":332,"topic":"logic","q":"Ондық жүйедегі 10 санының екілік кодқа айналдырғандағы мәні","opts":["1100","1010","1011","1001"],"ans":1},
+  {"id":333,"topic":"logic","q":"Формуланы C4 ұяшығынан C2 ұяшығына көшіргеннен кейін C2 ұяшығында жазылуға тиіс формула:","visual":`<table class=\"excel-table\"><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td class=\"row-num\">1</td><td>30</td><td>5</td><td></td></tr><tr><td class=\"row-num\">2</td><td>20</td><td>4</td><td style=\"background:#0369a1;color:#fff;font-weight:bold;\">[ ? ]</td></tr><tr><td class=\"row-num\">3</td><td>30</td><td>5</td><td></td></tr><tr><td class=\"row-num\">4</td><td>40</td><td>2</td><td style=\"font-family:monospace;\">=$A$1*A4+B4</td></tr></tbody></table>`,"opts":["=A1*A2+B1","=B1*A2+B2","=A1*A2+B2","=A1*A3+B2"],"ans":2},
+  {"id":334,"topic":"sql","q":"«employee» кестесінен «нәтиже» кестесін алатын сұраныс:","visual":`<div style=\"display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;\"><table class=\"grid-table\" style=\"flex:1;\"><thead><tr><th>id</th><th>first_name</th><th>salary</th></tr></thead><tbody><tr><td>1</td><td>Raim</td><td>800000</td></tr><tr><td>2</td><td>Artur</td><td>750000</td></tr><tr><td>3</td><td>Darkhan</td><td>770000</td></tr><tr><td>4</td><td>Ainur</td><td>300000</td></tr><tr><td>5</td><td>Dariga</td><td>800000</td></tr></tbody></table><table class=\"grid-table\" style=\"flex:1;\"><thead><tr><th>first_name</th></tr></thead><tbody><tr><td>Darkhan</td></tr><tr><td>Dariga</td></tr></tbody></table></div>`,"opts":["select first_name from employee where first_name like 'D%d';","select first_name from employee where first_name like '_D%';","select first_name from employee where first_name like 'D%';","select first_name from employee where first_name like '%D%';"],"ans":2},
+  {"id":335,"topic":"web","q":"HTML-де белсенді емес, яғни әлі ашылмаған, қаралмаған сілтемелер түстерін береді","opts":["blink","alink","link","vlink"],"ans":2},
+  {"id":336,"topic":"logic","q":"Диаграмманы құру қадамдары","opts":["Мәзір-Деректер-Құрал саймандар тақтасы-Диаграмма","Мәзір-Басты-Құрал саймандар тақтасы-Диаграмма","Мәзір-Формулалар-Құрал саймандар тақтасы-Диаграмма","Мәзір-Қою-Құрал саймандар тақтасы-Диаграмма"],"ans":3},
+  {"id":337,"topic":"logic","q":"Формуланы C1 ұяшығынан C2 ұяшығына көшіргеннен кейін C2 ұяшығында жазылуға тиіс формула:","visual":`<table class=\"excel-table\"><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td class=\"row-num\">1</td><td>10</td><td>6</td><td style=\"font-family:monospace;\">=$A$1*B1+$A1</td></tr><tr><td class=\"row-num\">2</td><td>5</td><td>8</td><td style=\"background:#0369a1;color:#fff;font-weight:bold;\">[ ? ]</td></tr></tbody></table>`,"opts":["=A1*B1+A2","=A1*B1+A1","=A1*B2+A2","=A1*B2+A1"],"ans":2},
+  {"id":338,"topic":"network","q":"Үзінділерді пайдаланып құрастыруға болатын IP адрес:","visual":`<table class=\"grid-table\"><thead><tr><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead><tbody><tr><td>2.162</td><td>4.18</td><td>.61</td><td>20</td></tr></tbody></table>`,"opts":["1342","4213","1234","2341"],"ans":1},
+  {"id":339,"topic":"python","q":"Программаның нәтижесін анықтаңыз:","code":"numbers = [2, -5, 13, 4, -65, 56]\nsum = 0\ncount = 0\nfor number in numbers:\n    if number % 2 == 0:\n        sum += number\n    if number > 0:\n        count += 1\nprint('sum=', sum)\nprint('count=', count)","opts":["sum=5, count=5","sum=62, count=4","sum=4, count=62","sum=62, count=6"],"ans":1},
+  {"id":340,"topic":"web","q":"CSS селекторы id=\"main\" элементін дұрыс таңдау нұсқасы","opts":["#main",".main","main","id.main"],"ans":0},
+  {"id":341,"topic":"security","q":"Ақпараттың статикалық тұтастығының қаупі","opts":["деректердің қайталануы","қате ақпараттарды енгізу","қосымша хабарламалар енгізу","деректерді ұрлау"],"ans":1}
+];
+
+const TOPIC_NAMES = {
+  python: "🐍 Python & Алгоритмдер",
+  sql: "🗄️ Деректер Қоры & SQL",
+  web: "🌐 Web (HTML & CSS)",
+  network: "📡 Желілер & Байланыс",
+  security: "🛡️ Қауіпсіздік & Криптография",
+  hardware: "⚙️ Компьютер Архитектурасы",
+  logic: "📊 Логика & Excel",
+  ai: "🤖 Жасанды Интеллект & Графика"
+};
+
+let currentMode = "game";
+let soundEnabled = true;
+let currentList = [];
+let currentIndex = 0;
+let userAnswers = {};
+let flagged = {};
+let score = 0;
+let streak = 0;
+let timer = null;
+let timeLeft = 40;
+let synth = window.audioContext || null;
+
+function playSound(type) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    if (type === "correct") {
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      osc.start(); osc.stop(ctx.currentTime + 0.3);
+    } else {
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      osc.frequency.setValueAtTime(146.83, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      osc.start(); osc.stop(ctx.currentTime + 0.3);
+    }
+  } catch (e) {}
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  document.getElementById("soundBtn").innerText = soundEnabled ? "🔊 Дыбыс: Қосулы" : "🔇 Дыбыс: Өшірулі";
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById("gameModeBtn").classList.toggle("active", mode === "game");
+  document.getElementById("studyModeBtn").classList.toggle("active", mode === "study");
+}
+
+function switchTab(tabId) {
+  document.querySelectorAll(".tab-btn").forEach((btn, idx) => {
+    btn.classList.toggle("active", ["blocks", "topics", "exam", "bank"][idx] === tabId);
+  });
+  document.getElementById("tabBlocks").style.display = tabId === "blocks" ? "block" : "none";
+  document.getElementById("tabTopics").style.display = tabId === "topics" ? "block" : "none";
+  document.getElementById("tabExam").style.display = tabId === "exam" ? "block" : "none";
+  document.getElementById("tabBank").style.display = tabId === "bank" ? "block" : "none";
+  if (tabId === "topics") renderTopicsMenu();
+  if (tabId === "bank") renderBankList();
+}
+
+function renderTopicsMenu() {
+  const container = document.getElementById("topicsMenu");
+  container.innerHTML = "";
+  Object.keys(TOPIC_NAMES).forEach(top => {
+    const count = DB.filter(q => q.topic === top).length;
+    const card = document.createElement("div");
+    card.className = "menu-card";
+    card.onclick = () => startTopic(top);
+    card.innerHTML = `
+      <span class="menu-badge">${count} сұрақ</span>
+      <div class="menu-title">${TOPIC_NAMES[top]}</div>
+      <div class="menu-desc">Осы бөлімдегі барлық сұрақтарды ретімен жаттап шығыңыз.</div>
+      <button class="menu-btn">Бастау →</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function renderBankList(filter = "") {
+  const container = document.getElementById("bankList");
+  const qList = filter ? DB.filter(q => (q.q + " " + q.opts.join(" ") + " " + q.id).toLowerCase().includes(filter.toLowerCase())) : DB;
+  container.innerHTML = qList.map(q => `
+    <div class="q-card" style="padding:16px;margin-bottom:12px;">
+      <div style="font-size:0.75rem;color:var(--primary);font-weight:800;margin-bottom:4px;">№${q.id} · ${TOPIC_NAMES[q.topic] || q.topic}</div>
+      <div style="font-weight:700;margin-bottom:8px;color:#fff;">${q.q}</div>
+      ${q.visual || (q.code ? `<pre class="code-box"><code>${escapeHtml(q.code)}</code></pre>` : "")}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.85rem;margin-top:8px;">
+        ${q.opts.map((o, idx) => `
+          <div style="padding:6px 10px;border-radius:6px;background:${idx === q.ans ? '#064e3b;color:#fff;font-weight:bold;border:1px solid #10b981;' : '#1e293b;color:#94a3b8;'}">
+            ${chr(idx)}) ${escapeHtml(o)} ${idx === q.ans ? '✓' : ''}
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+function filterBank() {
+  const val = document.getElementById("searchInput").value;
+  renderBankList(val);
+}
+
+function chr(idx) { return ["A", "B", "C", "D"][idx]; }
+function escapeHtml(str) {
+  if (!str) return "";
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function startBlock(startId, endId, title) {
+  currentList = DB.filter(q => q.id >= startId && q.id <= endId);
+  initQuiz(title);
+}
+
+function startTopic(top) {
+  currentList = DB.filter(q => q.topic === top);
+  initQuiz(TOPIC_NAMES[top]);
+}
+
+function startVisuals() {
+  const visualIds = [178, 193, 212, 219, 220, 234, 242, 294, 333, 334, 337, 338];
+  currentList = DB.filter(q => visualIds.includes(q.id));
+  initQuiz("Суретті & Кестелі сұрақтар");
+}
+
+function startMarathon() {
+  currentList = [...DB];
+  initQuiz("175 сұрақ МАРАФОН");
+}
+
+function startExam() {
+  // 40 random questions from DB
+  const shuffled = [...DB].sort(() => 0.5 - Math.random());
+  currentList = shuffled.slice(0, 40);
+  initQuiz("🎓 Емтихан Симуляторы (40 сұрақ)", true);
+}
+
+function startErrors() {
+  const errIds = JSON.parse(localStorage.getItem("pbb2_errors") || "[]");
+  if (!errIds.length) return alert("Қателер банкі бос!");
+  currentList = DB.filter(q => errIds.includes(q.id));
+  initQuiz("Қателермен жұмыс");
+}
+
+function initQuiz(title, isExam = false) {
+  currentIndex = 0;
+  userAnswers = {};
+  flagged = {};
+  score = 0;
+  streak = 0;
+
+  document.getElementById("dashboardView").style.display = "none";
+  document.getElementById("resultView").style.display = "none";
+  document.getElementById("quizView").style.display = "block";
+
+  document.getElementById("studyNav").style.display = currentMode === "study" || isExam ? "block" : "none";
+  document.getElementById("streakBox").style.display = currentMode === "game" && !isExam ? "block" : "none";
+
+  renderQuestion();
+}
+
+function renderQuestion() {
+  clearInterval(timer);
+  const q = currentList[currentIndex];
+  if (!q) return showResults();
+
+  document.getElementById("quizProgress").innerText = `Сұрақ ${currentIndex + 1} / ${currentList.length}`;
+  document.getElementById("qBadge").innerText = `№${q.id} · ${TOPIC_NAMES[q.topic] || q.topic}`;
+  document.getElementById("qText").innerText = q.q;
+
+  // Visual / Code
+  const vBox = document.getElementById("qVisual");
+  if (q.visual) {
+    vBox.innerHTML = q.visual;
+  } else if (q.code) {
+    vBox.innerHTML = `<pre class="code-box"><code>${escapeHtml(q.code)}</code></pre>`;
+  } else {
+    vBox.innerHTML = "";
+  }
+
+  // Flag button
+  const fBtn = document.getElementById("flagBtn");
+  fBtn.style.color = flagged[q.id] ? "#f59e0b" : "#94a3b8";
+
+  // Options
+  const grid = document.getElementById("optionsGrid");
+  grid.innerHTML = "";
+  const answered = userAnswers[q.id] !== undefined;
+
+  q.opts.forEach((opt, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "opt-btn";
+    btn.innerHTML = `<span class="opt-key">${chr(idx)}</span><span>${escapeHtml(opt)}</span>`;
+
+    if (answered) {
+      if (idx === q.ans) btn.classList.add("correct");
+      if (userAnswers[q.id] === idx && idx !== q.ans) btn.classList.add("wrong");
+    } else {
+      btn.onclick = () => selectAnswer(idx);
+    }
+    grid.appendChild(btn);
+  });
+
+  // Prev / Next buttons
+  document.getElementById("prevBtn").style.display = currentIndex > 0 ? "inline-flex" : "none";
+  document.getElementById("nextBtn").style.display = answered ? "inline-flex" : "none";
+  document.getElementById("scoreLive").innerText = `Ұпай: ${score}`;
+
+  if (document.getElementById("studyNav").style.display === "block") {
+    renderNavGrid();
+  }
+
+  // Timer
+  if (currentMode === "game") {
+    timeLeft = 40;
+    updateTimerText();
+    timer = setInterval(() => {
+      timeLeft--;
+      updateTimerText();
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        selectAnswer(-1); // timeout
+      }
+    }, 1000);
+  } else {
+    document.getElementById("timerBox").innerText = "📚 Жаттау";
+  }
+}
+
+function updateTimerText() {
+  document.getElementById("timerBox").innerText = `⏱️ ${timeLeft}с`;
+}
+
+function selectAnswer(chosenIdx) {
+  clearInterval(timer);
+  const q = currentList[currentIndex];
+  userAnswers[q.id] = chosenIdx;
+
+  // Update total answered count
+  let totalD = parseInt(localStorage.getItem("pbb2_total_done") || "0") + 1;
+  localStorage.setItem("pbb2_total_done", totalD);
+
+  const isRight = chosenIdx === q.ans;
+  if (isRight) {
+    score++;
+    streak++;
+    playSound("correct");
+    removeError(q.id);
+  } else {
+    streak = 0;
+    playSound("wrong");
+    saveError(q.id);
+  }
+
+  document.getElementById("streakBox").innerText = `🔥 Streak: ${streak}`;
+
+  // Highlight choices
+  const btns = document.querySelectorAll(".opt-btn");
+  btns.forEach((btn, idx) => {
+    btn.onclick = null;
+    if (idx === q.ans) btn.classList.add("correct");
+    if (idx === chosenIdx && !isRight) btn.classList.add("wrong");
+  });
+
+  document.getElementById("nextBtn").style.display = "inline-flex";
+
+  if (currentMode === "game" && isRight) {
+    setTimeout(() => { nextQuestion(); }, 900);
+  }
+}
+
+function nextQuestion() {
+  if (currentIndex < currentList.length - 1) {
+    currentIndex++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    renderQuestion();
+  }
+}
+
+function toggleFlag() {
+  const q = currentList[currentIndex];
+  flagged[q.id] = !flagged[q.id];
+  document.getElementById("flagBtn").style.color = flagged[q.id] ? "#f59e0b" : "#94a3b8";
+}
+
+function renderNavGrid() {
+  const container = document.getElementById("navGrid");
+  container.innerHTML = currentList.map((q, idx) => {
+    let cls = "nav-dot";
+    if (idx === currentIndex) cls += " current";
+    if (userAnswers[q.id] !== undefined) {
+      cls += userAnswers[q.id] === q.ans ? " ans-correct" : " ans-wrong";
+    }
+    return `<div class="${cls}" onclick="jumpToQuestion(${idx})">${idx + 1}</div>`;
+  }).join("");
+}
+
+function jumpToQuestion(idx) {
+  currentIndex = idx;
+  renderQuestion();
+}
+
+function showResults() {
+  clearInterval(timer);
+  document.getElementById("quizView").style.display = "none";
+  document.getElementById("resultView").style.display = "block";
+
+  const total = currentList.length;
+  const percent = Math.round((score / total) * 100);
+  document.getElementById("resultScore").innerText = `${score} / ${total} (${percent}%)`;
+
+  let title = "Тест аяқталды!";
+  let emoji = "🎉";
+  let desc = `Сіз ${total} сұрақтың ${score}-іне дұрыс жауап бердіңіз.`;
+
+  if (percent >= 80) {
+    title = "КЕРЕМЕТ НӘТИЖЕ! 🏆";
+    emoji = "🔥";
+    desc = "Құттықтаймыз! Сіз 80%-дан жоғары межені еркін бағындырдыңыз.";
+  } else if (percent >= 50) {
+    title = "ЖАҚСЫ ТАЛПЫНЫС! 👍";
+    emoji = "⚡";
+    desc = "Нәтижеңіз жаман емес, бірақ емтиханда 80%+ алу үшін қателермен жұмыс жасаңыз.";
+  } else {
+    title = "ТАҒЫ ДА ДАЙЫНДАЛУ КЕРЕК! 💪";
+    emoji = "📖";
+    desc = "Базаны жаттау режимінде толық қайталап шығуды ұсынамыз.";
+  }
+
+  document.getElementById("resultTitle").innerText = title;
+  document.getElementById("resultEmoji").innerText = emoji;
+  document.getElementById("resultDesc").innerText = desc;
+
+  // Save exam best score
+  if (total === 40) {
+    const prevBest = parseInt(localStorage.getItem("pbb2_best_exam") || "0");
+    if (score > prevBest) {
+      localStorage.setItem("pbb2_best_exam", score);
+    }
+  }
+
+  // Error retry button
+  const errIds = JSON.parse(localStorage.getItem("pbb2_errors") || "[]");
+  document.getElementById("retryErrorsBtn").style.display = errIds.length > 0 ? "inline-flex" : "none";
+}
+
+function saveError(id) {
+  let errs = JSON.parse(localStorage.getItem("pbb2_errors") || "[]");
+  if (!errs.includes(id)) {
+    errs.push(id);
+    localStorage.setItem("pbb2_errors", JSON.stringify(errs));
+  }
+  updateDashboardStats();
+}
+
+function removeError(id) {
+  let errs = JSON.parse(localStorage.getItem("pbb2_errors") || "[]");
+  errs = errs.filter(e => e !== id);
+  localStorage.setItem("pbb2_errors", JSON.stringify(errs));
+  updateDashboardStats();
+}
+
+function quitQuiz() {
+  if (confirm("Тесттен шығып, басты мәзірге оралғыңыз келе ме?")) {
+    clearInterval(timer);
+    showDashboard();
+  }
+}
+
+function showDashboard() {
+  clearInterval(timer);
+  document.getElementById("quizView").style.display = "none";
+  document.getElementById("resultView").style.display = "none";
+  document.getElementById("dashboardView").style.display = "block";
+  updateDashboardStats();
+}
+
+function updateDashboardStats() {
+  document.getElementById("totalDone").innerText = localStorage.getItem("pbb2_total_done") || "0";
+  const best = localStorage.getItem("pbb2_best_exam") || "0";
+  document.getElementById("userScore").innerText = `${best}/40`;
+  const errs = JSON.parse(localStorage.getItem("pbb2_errors") || "[]");
+  document.getElementById("errorCount").innerText = errs.length;
+}
+
+// Keyboard shortcuts (1-4 or A-D, Enter for next)
+window.addEventListener("keydown", (e) => {
+  if (document.getElementById("quizView").style.display !== "block") return;
+  const key = e.key.toUpperCase();
+  const q = currentList[currentIndex];
+  if (!q) return;
+
+  if (["1", "A"].includes(key)) tryChoose(0);
+  if (["2", "B"].includes(key)) tryChoose(1);
+  if (["3", "C"].includes(key)) tryChoose(2);
+  if (["4", "D"].includes(key)) tryChoose(3);
+  if (["ENTER", " "].includes(key)) {
+    if (userAnswers[q.id] !== undefined) nextQuestion();
+  }
+});
+
+function tryChoose(idx) {
+  const q = currentList[currentIndex];
+  if (q && userAnswers[q.id] === undefined) {
+    selectAnswer(idx);
+  }
+}
+
+// Initial boot
+updateDashboardStats();
+</script>
+</body>
+</html>
